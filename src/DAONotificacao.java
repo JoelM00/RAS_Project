@@ -45,7 +45,7 @@ public class DAONotificacao {
         Connection conn = ConfigDAO.connect();
         try {
             Statement stm = conn.createStatement();
-            stm.executeUpdate("CALL notificaEquipa('"+idEquipa+"','"+mensagem+"');");
+            stm.executeQuery("CALL notificaEquipa('"+idEquipa+"','"+mensagem+"');");
         } catch (Exception e) {
             e.printStackTrace();
         }  finally {
@@ -79,7 +79,7 @@ public class DAONotificacao {
         Connection conn = ConfigDAO.connect();
         try {
             Statement stm = conn.createStatement();
-            stm.executeUpdate( "CALL apagaNotificacoes('"+username+"');");
+            stm.executeQuery( "CALL apagaNotificacoes('"+username+"');");
         } catch (Exception e) {
             e.printStackTrace();
         }  finally {

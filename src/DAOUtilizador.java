@@ -1,5 +1,6 @@
 import Objetos.Utilizador;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -87,7 +88,7 @@ public class DAOUtilizador {
         Connection conn = ConfigDAO.connect();
         try {
             Statement stm = conn.createStatement();
-            stm.executeUpdate("CALL putUtilizador('"+username+"','"+password+"',"+gestor+",'"+genero+"',"+anoNascimento+",'"+localizacao+"',"+saldo+",'"+contaMultibanco+"');");
+            stm.executeQuery("CALL putUtilizador('"+username+"','"+password+"',"+gestor+",'"+genero+"',"+anoNascimento+",'"+localizacao+"',"+saldo+",'"+contaMultibanco+"');");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,13 +97,19 @@ public class DAOUtilizador {
         }
     }
 
+    /*TEM PROBLEMA*/
     public int verSaldo(String username) {
+        String query = "{CALL verSaldo(?)}";
         int saldo = -1;
+
         Connection conn = ConfigDAO.connect();
         try {
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("CALL verSaldo('"+username+"');");
-            saldo = rs.getInt("saldo");
+            CallableStatement stm = conn.prepareCall(query);
+
+            stm.setString(1, username);
+            ResultSet rs = stm.executeQuery();
+
+            saldo = rs.getInt("saldo"); //o problema vem daqui
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +123,7 @@ public class DAOUtilizador {
         Connection conn = ConfigDAO.connect();
         try {
             Statement stm = conn.createStatement();
-            stm.executeUpdate("CALL notificaJogo("+idJogo+",'"+mensagem+"');");
+            stm.executeQuery("CALL notificaJogo("+idJogo+",'"+mensagem+"');");
         } catch (Exception e) {
             e.printStackTrace();
         }  finally {
@@ -124,13 +131,18 @@ public class DAOUtilizador {
         }
     }
 
+    /*TEM PROBLEMA*/
     public boolean verificaFavorito(String idEquipa,String username) {
         boolean favorito = false;
         Connection conn = ConfigDAO.connect();
         try {
+
             Statement stm = conn.createStatement();
+
             ResultSet rs = stm.executeQuery("CALL verificaFavorito('"+idEquipa+"','"+username+"');");
-            favorito = rs.getBoolean("favorito");
+
+            favorito = rs.getBoolean("favorito"); //esta aqui
+
         } catch (Exception e) {
             e.printStackTrace();
         }  finally {
@@ -143,7 +155,7 @@ public class DAOUtilizador {
         Connection conn = ConfigDAO.connect();
         try {
             Statement stm = conn.createStatement();
-            stm.executeUpdate("CALL addFavorito('"+idEquipa+"','"+username+"');");
+            stm.executeQuery("CALL addFavorito('"+idEquipa+"','"+username+"');");
         } catch (Exception e) {
             e.printStackTrace();
         }  finally {
