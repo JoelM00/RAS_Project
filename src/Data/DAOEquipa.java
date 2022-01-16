@@ -1,6 +1,7 @@
 package Data;
 
 import Objects.Aposta;
+import Objects.Equipa;
 import Objects.Jogo;
 
 import java.sql.*;
@@ -165,6 +166,47 @@ public class DAOEquipa {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         } finally {
+            ConfigDAO.close(conn);
+        }
+    }
+
+    public Equipa getEquipa(String idEquipa) {
+        String query = "{CALL getEquipa(?)}";
+        Equipa equipa = null;
+
+        Connection conn = ConfigDAO.connect();
+        try {
+            CallableStatement stm = conn.prepareCall(query);
+            stm.setString(1, idEquipa);
+
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                return new Equipa(rs.getString("idNome"),
+                        rs.getString("localidade"),
+                        rs.getString("liga"),
+                        rs.getString("desporto"),
+                        rs.getString("descricao"),
+                        rs.getString("utilizador_username"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        } finally {
+            ConfigDAO.close(conn);
+        }
+        return equipa;
+    }
+
+    public void notificaEquipa(String idEquipa,String mensagem) {
+        Connection conn = ConfigDAO.connect();
+        try {
+            Statement stm = conn.createStatement();
+            stm.executeQuery("CALL notificaEquipa('"+idEquipa+"','"+mensagem+"');");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  finally {
             ConfigDAO.close(conn);
         }
     }

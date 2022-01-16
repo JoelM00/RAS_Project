@@ -1,6 +1,7 @@
 package Data;
 
 import Objects.Aposta;
+import Objects.Equipa;
 import Objects.Jogo;
 
 import java.sql.*;
@@ -228,15 +229,21 @@ public class DAOJogo {
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {
-                aposta = new Aposta(rs.getInt("id"),
-                        rs.getFloat("minAposta"),
-                        rs.getFloat("maxAposta"),
-                        rs.getFloat("rate"),
-                        rs.getInt("jogo_idChave"),
-                        rs.getString("tipo"),
-                        rs.getInt("posicao"),
-                        rs.getString("equipa_idNome"),
-                        rs.getBoolean("resultado"));
+                int id = rs.getInt("id");
+                float minAposta = rs.getFloat("minAposta");
+                float maxAposta = rs.getFloat("maxAposta");
+                float rate = rs.getFloat("rate");
+                int jogo_idChave = rs.getInt("jogo_idChave");
+                String tipo = rs.getString("tipo");
+                int posicao = rs.getInt("posicao");
+                String equipa_idNome = rs.getString("equipa_idNome");
+                Object resul = rs.getObject("resultado");
+                if (resul == null) {
+                     return new Aposta(id,minAposta,maxAposta,rate,jogo_idChave,tipo,posicao,equipa_idNome,null);
+                } else {
+                    Boolean r = (Boolean) resul;
+                    return new Aposta(id,minAposta,maxAposta,rate,jogo_idChave,tipo,posicao,equipa_idNome,r);
+                }
             }
             return aposta;
 
@@ -372,7 +379,7 @@ public class DAOJogo {
     }
 
     /*NAO FUNCIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    public void insereApostaJogo(String idEquipa, int idJogo, boolean resultado, String tipo, float minApostar, float maxApostar, float rate, int posicao) {
+    public void insereApostaJogo(String idEquipa, int idJogo, Boolean resultado, String tipo, float minApostar, float maxApostar, float rate, int posicao) {
         String query = "{CALL insereApostaJogo(?, ?, ?, ?, ?, ?, ?, ?)}";
 
         Connection conn = ConfigDAO.connect();
@@ -415,4 +422,35 @@ public class DAOJogo {
             ConfigDAO.close(conn);
         }
     }
+
+    public Equipa getEquipa(String idEquipa) {
+        String query = "{CALL getEquipa(?)}";
+        Equipa equipa = null;
+
+        Connection conn = ConfigDAO.connect();
+        try {
+            CallableStatement stm = conn.prepareCall(query);
+            stm.setString(1, idEquipa);
+
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                return new Equipa(rs.getString("idNome"),
+                        rs.getString("localidade"),
+                        rs.getString("liga"),
+                        rs.getString("desporto"),
+                        rs.getString("descricao"),
+                        rs.getString("utilizador_username"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        } finally {
+            ConfigDAO.close(conn);
+        }
+        return equipa;
+    }
+
+
 }

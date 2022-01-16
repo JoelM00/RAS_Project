@@ -6,7 +6,7 @@ public class Main {
         try {
             DAOJogo n = DAOJogo.getInstance();
 
-            System.out.println(n.getAposta(1));
+            System.out.println(n.getEquipa("SL Benfica"));
 
 
 
