@@ -217,6 +217,37 @@ public class DAOJogo {
         return apostas;
     }
 
+    public Aposta getAposta(int idAposta) {
+        String query = "{CALL getAposta(?)}";
+        Aposta aposta = null;
+        Connection conn = ConfigDAO.connect();
+        try {
+            CallableStatement stm = conn.prepareCall(query);
+            stm.setInt(1, idAposta);
+
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                aposta = new Aposta(rs.getInt("id"),
+                        rs.getFloat("minAposta"),
+                        rs.getFloat("maxAposta"),
+                        rs.getFloat("rate"),
+                        rs.getInt("jogo_idChave"),
+                        rs.getString("tipo"),
+                        rs.getInt("posicao"),
+                        rs.getString("equipa_idNome"),
+                        rs.getBoolean("resultado"));
+            }
+            return aposta;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        } finally {
+            ConfigDAO.close(conn);
+        }
+    }
+
     public void alteraJogo(String estado, String data, String local, int idJogo, boolean aceitaApostas) {
         String query = "{CALL alteraJogo(?, ?, ?, ?, ?)}";
 
@@ -369,6 +400,18 @@ public class DAOJogo {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         } finally {
+            ConfigDAO.close(conn);
+        }
+    }
+
+    public void notificaJogo(int idJogo,String mensagem) {
+        Connection conn = ConfigDAO.connect();
+        try {
+            Statement stm = conn.createStatement();
+            stm.executeQuery("CALL notificaJogo("+idJogo+",'"+mensagem+"');");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  finally {
             ConfigDAO.close(conn);
         }
     }

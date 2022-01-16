@@ -1,9 +1,10 @@
+import Data.DAOApostaUtilizador;
 import Data.DAOFaturas;
 import Data.DAONotificacao;
 import Data.DAOUtilizador;
-import Objects.Notificacao;
-import Objects.Utilizador;
+import Objects.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SSUtilizador {
@@ -44,16 +45,26 @@ public class SSUtilizador {
     }
 
     public List<Notificacao> verNotificacoes(String username) {
-        Utilizador u = utilizador.getUtilizador(username);
-
-        if (u != null) {
-            
-        }
-
+        return notificacao.verNotificacoes(username);
     }
 
+    public void apagaNotificacoes(String username) {
+        notificacao.apagaNotificacoes(username);
+    }
 
+    public void criarFatura(String idFatura,float valor,String tipo,String data,String estado,String dataV,String utilizador,String moeda) {
+        faturas.registaFatura(idFatura,valor,tipo,data,estado,dataV,utilizador,moeda);
+    }
 
+    public int verSaldo(String username) {
+        return utilizador.verSaldo(username);
+    }
 
+    public List<Fatura> verFaturas(String idUser) {
+        return faturas.verFaturas(idUser);
+    }
 
+    public void confirmaPagamento(String idFatura) {
+        faturas.confirmaFatura(idFatura);
+    }
 }

@@ -136,6 +136,4 @@ public class DAOFaturas {
         }
         return fat;
     }
-
-
 }

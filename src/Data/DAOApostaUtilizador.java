@@ -148,4 +148,25 @@ public class DAOApostaUtilizador {
             ConfigDAO.close(conn);
         }
     }
+
+    public int verSaldo(String username) {
+        String query = "{CALL verSaldo(?)}";
+        int saldo = -1;
+
+        Connection conn = ConfigDAO.connect();
+        try {
+            CallableStatement stm = conn.prepareCall(query);
+
+            stm.setString(1, username);
+            ResultSet rs = stm.executeQuery();
+
+            saldo = rs.getInt("saldo"); //o problema vem daqui
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  finally {
+            ConfigDAO.close(conn);
+        }
+        return saldo;
+    }
 }
