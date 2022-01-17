@@ -17,6 +17,54 @@ public class Equipa {
         this.gestor = gestor;
     }
 
+    public String getIdnome() {
+        return idnome;
+    }
+
+    public void setIdnome(String idnome) {
+        this.idnome = idnome;
+    }
+
+    public String getLocalidade() {
+        return localidade;
+    }
+
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
+    }
+
+    public String getLiga() {
+        return liga;
+    }
+
+    public void setLiga(String liga) {
+        this.liga = liga;
+    }
+
+    public String getDesporto() {
+        return desporto;
+    }
+
+    public void setDesporto(String desporto) {
+        this.desporto = desporto;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getGestor() {
+        return gestor;
+    }
+
+    public void setGestor(String gestor) {
+        this.gestor = gestor;
+    }
+
     @Override
     public String toString() {
         return "Equipa{" +

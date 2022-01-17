@@ -33,6 +33,14 @@ public class Aposta {
         this.resultado = resultado;
     }
 
+    public Boolean getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(Boolean resultado) {
+        this.resultado = resultado;
+    }
+
     public float getMinAposta() {
         return minAposta;
     }

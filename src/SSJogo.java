@@ -38,12 +38,12 @@ public class SSJogo {
         return jogo.getApostas(idJogo);
     }
 
-    public void fazerAposta(String data, float valor, float rate, String utilizador, int apostaId) {
+    public void fazerAposta(String data, float valor, String utilizador, int apostaId) {
         int saldo = apostUtil.verSaldo(utilizador);
         Aposta ap = jogo.getAposta(apostaId);
 
         if (valor >= ap.getMinAposta() && valor <= ap.getMaxAposta() && saldo >= valor) {
-            apostUtil.fazAposta(data, valor, rate, utilizador, apostaId);
+            apostUtil.fazAposta(data, valor, ap.getRate(), utilizador, apostaId);
         }
     }
 
@@ -53,26 +53,31 @@ public class SSJogo {
         }
     }
 
-    public void acabaJogo(String gestor, String data, String local, int idJogo, boolean aceitaApostas) {
-        alteraJogo(gestor, "JOGO TERMINADO", data, local, idJogo, aceitaApostas);
-        jogo.notificaJogo(idJogo, "JOGO TERMINADO");
+    public void acabaJogo(int idJogo) {
+        Jogo j = jogo.getJogo(idJogo);
+        alteraJogo(j.getGestor(), "JOGO TERMINADO", j.getData(), j.getLocal(), idJogo, false);
+        jogo.notificaJogo(idJogo, j.getDescricao()+"JOGO TERMINADO");
     }
 
-    public void fecharAposta(Boolean resultado, float minAposta, float maxAposta, float rate, int id) {
-        if (resultado == null) {
-            jogo.alteraAposta(resultado, minAposta, maxAposta, rate, id);
-            if (resultado == true) {
-                apostUtil.pagaAposta(id);
+    public void fecharAposta(int idAposta,boolean resultado) {
+        Aposta ap = jogo.getAposta(idAposta);
+
+        if (ap.getResultado() == null) {
+            jogo.alteraAposta(resultado, ap.getMinAposta(), ap.getMaxAposta(), ap.getRate(), idAposta);
+            if (resultado) {
+                apostUtil.pagaAposta(idAposta);
             }
         }
     }
 
-    public void alteraRateAposta(Boolean resultado, float minAposta, float maxAposta, float rate, int id) {
-        jogo.alteraAposta(resultado, minAposta, maxAposta, rate, id);
+    public void alteraRateAposta(float rate, int idAposta) {
+        Aposta ap = jogo.getAposta(idAposta);
+        jogo.alteraAposta(ap.getResultado(), ap.getMinAposta(), ap.getMaxAposta(), rate, idAposta);
     }
 
-    public void cancelaJogo(String estado, String data, String local, int idJogo, boolean aceitaApostas) {
-        jogo.alteraJogo(estado, data, local, idJogo, aceitaApostas);
+    public void cancelaJogo(int idJogo) {
+        Jogo j = jogo.getJogo(idJogo);
+        jogo.alteraJogo("TERMINADO", j.getData(), j.getLocal(), idJogo, false);
         apostUtil.devolveAposta(idJogo);
     }
 
@@ -87,6 +92,20 @@ public class SSJogo {
     public void alteraEquipa(String idGestor, int idJogo, String idEquipa, String liga, String local, String desporto, String descricao) {
         if (jogo.verificaGestor(idGestor, idJogo)) {
             equipa.modificaEquipa(idEquipa, liga, local, desporto, descricao);
+        }
+    }
+
+    public void alteraEquipaLocal(String idGestor, int idJogo,String idEquipa,String local) {
+        Equipa e = jogo.getEquipa(idEquipa);
+        if (jogo.verificaGestor(idGestor, idJogo)) {
+            equipa.modificaEquipa(idEquipa, e.getLiga(), local, e.getDesporto(), e.getDescricao());
+        }
+    }
+
+    public void alteraEquipaDescricao(String idGestor, int idJogo,String idEquipa,String descricao) {
+        Equipa e = jogo.getEquipa(idEquipa);
+        if (jogo.verificaGestor(idGestor, idJogo)) {
+            equipa.modificaEquipa(idEquipa, e.getLiga(), e.getLocalidade(), e.getDesporto(), descricao);
         }
     }
 
