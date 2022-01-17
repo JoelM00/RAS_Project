@@ -304,10 +304,10 @@ public class DAOJogo {
         }
     }
 
-    /*NAO FUNCIONA!!!!!!!!!!!!!!!!!!!!!!!!!*/
     public boolean verificaGestor(String idGestor, int idJogo){
         String query = "{CALL verificaGestor(?, ?)}";
         boolean ret;
+        int r = -1;
 
         Connection conn = ConfigDAO.connect();
         try {
@@ -317,10 +317,9 @@ public class DAOJogo {
 
             ResultSet rs = stm.executeQuery();
 
-            int r = rs.getInt("verificacao");//erro esta aqui
-
-
-            System.out.println(r);
+            while(rs.next()) {
+                 r = rs.getInt("verificacao");
+            }
 
             if (r == 1) ret = true;
             else ret = false;

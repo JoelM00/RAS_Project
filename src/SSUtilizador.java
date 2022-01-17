@@ -30,6 +30,10 @@ public class SSUtilizador {
     }
 
 
+    public boolean verificaFavorito(String idEquipa,String username) {
+        return utilizador.verificaFavorito(idEquipa, username);
+    }
+
     public boolean registaUtilizador(String nome,String password,Boolean gestor,String genero,int anoNascimento,String localizacao,int saldo,String contaMultibanco) {
         Utilizador u = utilizador.getUtilizador(nome);
 

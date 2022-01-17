@@ -20,4 +20,19 @@ public class Fatura {
         this.gestor = gestor;
         this.moeda = moeda;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Fatura{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", valor=").append(valor);
+        sb.append(", tipoTransacao='").append(tipoTransacao).append('\'');
+        sb.append(", date='").append(date).append('\'');
+        sb.append(", estado='").append(estado).append('\'');
+        sb.append(", dataValidade='").append(dataValidade).append('\'');
+        sb.append(", gestor='").append(gestor).append('\'');
+        sb.append(", moeda='").append(moeda).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

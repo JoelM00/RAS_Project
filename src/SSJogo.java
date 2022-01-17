@@ -5,7 +5,6 @@ import Objects.Aposta;
 import Objects.ApostaUtilizador;
 import Objects.Equipa;
 import Objects.Jogo;
-
 import java.util.List;
 
 public class SSJogo {

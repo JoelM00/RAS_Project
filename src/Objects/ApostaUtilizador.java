@@ -20,4 +20,19 @@ public class ApostaUtilizador {
         this.descricao = descricao;
         this.resultado = resultado;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ApostaUtilizador{");
+        sb.append("id=").append(id);
+        sb.append(", data='").append(data).append('\'');
+        sb.append(", valor=").append(valor);
+        sb.append(", rate=").append(rate);
+        sb.append(", tipo='").append(tipo).append('\'');
+        sb.append(", equipaidNome='").append(equipaidNome).append('\'');
+        sb.append(", descricao='").append(descricao).append('\'');
+        sb.append(", resultado=").append(resultado);
+        sb.append('}');
+        return sb.toString();
+    }
 }

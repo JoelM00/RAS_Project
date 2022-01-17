@@ -99,7 +99,6 @@ public class DAOUtilizador {
         }
     }
 
-    /*TEM PROBLEMA*/
     public int verSaldo(String username) {
         String query = "{CALL verSaldo(?)}";
         int saldo = -1;
@@ -111,7 +110,9 @@ public class DAOUtilizador {
             stm.setString(1, username);
             ResultSet rs = stm.executeQuery();
 
-            saldo = rs.getInt("saldo"); //o problema vem daqui
+            while(rs.next()) {
+                saldo = rs.getInt("saldo");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +134,6 @@ public class DAOUtilizador {
         }
     }
 
-    /*TEM PROBLEMA*/
     public boolean verificaFavorito(String idEquipa,String username) {
         boolean favorito = false;
         Connection conn = ConfigDAO.connect();
@@ -143,7 +143,9 @@ public class DAOUtilizador {
 
             ResultSet rs = stm.executeQuery("CALL verificaFavorito('"+idEquipa+"','"+username+"');");
 
-            favorito = rs.getBoolean("favorito"); //esta aqui
+            while(rs.next()) {
+                favorito = rs.getBoolean("favorito");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
